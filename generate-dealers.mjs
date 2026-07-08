@@ -9,11 +9,11 @@ const indexHtmlPath = join(root, "index.html");
 const IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 
 const DEALER_LINKS = {
-  "365 new": {
+  "365-new": {
     href: "https://www.365motors.co.uk/",
     label: "365 Motors",
   },
-  "phantom new": {
+  "phantom-new": {
     href: "https://www.phantommotorcompany.co.uk/",
     label: "Phantom Motor Company",
   },
