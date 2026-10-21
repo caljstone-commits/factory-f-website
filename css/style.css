@@ -1754,6 +1754,222 @@ div.refurb-page__intro p {
   .quote-form__submit { width: 100%; }
 }
 
+/* ─────────────────────────── Lead photo / video picker ─────────────────────────── */
+
+.media-picker__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.media-picker__drop {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 3.4rem;
+  padding: 0.9rem 1rem;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--glass-edge);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  transition: border-color 0.35s, box-shadow 0.35s, background 0.35s;
+}
+
+.media-picker__drop span {
+  pointer-events: none;
+}
+
+.media-picker__drop:hover,
+.media-picker__drop:focus-within {
+  border-color: rgba(147, 1, 238, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(147, 1, 238, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.media-picker__drop:has(input:disabled) {
+  opacity: 0.6;
+}
+
+.media-picker__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.media-picker__hint {
+  margin: 0.75rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.media-picker__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.6rem, 1fr));
+  gap: 0.75rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.media-picker__list:empty {
+  display: none;
+}
+
+.media-picker__thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--glass-edge);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.media-picker__thumb img,
+.media-picker__thumb video,
+.media-picker__fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media-picker__fallback {
+  display: grid;
+  place-items: center;
+  color: var(--ink-dim);
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+}
+
+.media-picker__badge {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(5, 5, 8, 0.78);
+  color: #fff;
+  font-family: var(--display);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.media-picker__remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(5, 5, 8, 0.78);
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.media-picker__remove:hover,
+.media-picker__remove:focus-visible {
+  background: var(--purple);
+  outline: none;
+}
+
+.media-picker__name {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--ink-faint);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-picker__count {
+  margin: 0.75rem 0 0;
+  color: var(--ink-dim);
+  font-size: 0.85rem;
+}
+
+.media-picker__error {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 140, 140, 0.35);
+  background: rgba(255, 80, 80, 0.1);
+  color: #ffc9c9;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.media-picker__error[hidden],
+.media-picker__count[hidden],
+.quote-form__progress[hidden] {
+  display: none !important;
+}
+
+.quote-form__progress {
+  margin: 0 0 1rem;
+}
+
+.quote-form__progress-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.quote-form__progress-bar {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--purple), var(--purple-bright));
+}
+
+.quote-form__progress-bar.is-indeterminate {
+  width: 40%;
+  animation: lead-media-progress 1.1s ease-in-out infinite;
+}
+
+.quote-form__progress-text {
+  margin: 0.45rem 0 0;
+  color: var(--ink-dim);
+  font-size: 0.9rem;
+}
+
+@keyframes lead-media-progress {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(280%); }
+}
+
+@media (max-width: 640px) {
+  .media-picker__actions { grid-template-columns: 1fr; }
+  .media-picker__remove {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 /* ─────────────────────────── Reduced motion ─────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

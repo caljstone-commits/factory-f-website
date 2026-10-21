@@ -1,3 +1,4 @@
+-- Fresh project only. If quote_leads already exists, run lead_media.sql instead.
 -- Run this in Supabase Dashboard → SQL Editor
 -- Project: https://xflljearjaiwcjortoam.supabase.co
 
@@ -12,7 +13,8 @@ create table quote_leads (
   wheel_size text,
   service_type text,
   message text,
-  source_page text
+  source_page text,
+  media_paths text[]
 );
 
 alter table quote_leads enable row level security;

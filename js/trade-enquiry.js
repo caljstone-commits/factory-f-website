@@ -12,6 +12,20 @@
   if (!form || !submitBtn || !window.supabase) return;
 
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const media = window.FFLeadMedia?.bind({
+    input: document.getElementById("leadMedia"),
+    camera: document.getElementById("leadMediaCamera"),
+    list: document.getElementById("leadMediaList"),
+    error: document.getElementById("leadMediaError"),
+    count: document.getElementById("leadMediaCount"),
+  });
+  const progressEls = {
+    root: document.getElementById("tradeProgress"),
+    track: document.getElementById("tradeProgressTrack"),
+    bar: document.getElementById("tradeProgressBar"),
+    text: document.getElementById("tradeProgressText"),
+    button: submitBtn,
+  };
 
   const val = (id) => document.getElementById(id)?.value.trim() ?? "";
 
@@ -58,9 +72,27 @@
     };
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
+    media?.setBusy(true);
+    submitBtn.textContent = "Submitting…";
+
+    const leadId = crypto.randomUUID();
+    let mediaPaths = [];
+
+    try {
+      const files = media?.files() ?? [];
+      if (files.length && window.FFLeadMedia) {
+        mediaPaths = await window.FFLeadMedia.uploadFiles(supabase, leadId, files, (state) => {
+          window.FFLeadMedia.renderProgress(progressEls, state);
+        });
+      }
+    } catch (err) {
+      console.error("Lead media upload failed:", err);
+    }
+
+    submitBtn.textContent = "Submitting…";
 
     const payload = {
+      id: leadId,
       company_name: data.company_name,
       postcode: data.postcode || null,
       business_type: data.business_type || null,
@@ -68,16 +100,23 @@
       est_wheels_per_week: data.est_wheels_per_week || null,
       contact_number: data.contact_number,
       email: data.email || null,
+      media_paths: mediaPaths.length ? mediaPaths : null,
       source_page: document.title,
     };
 
     try {
-      const { error } = await supabase.from("trade_leads").insert(payload);
-      if (error) console.error("Supabase insert failed:", error);
+      let { error } = await supabase.from("trade_leads").insert(payload);
+      if (error) {
+        console.error("Supabase insert failed:", error);
+        const { id, media_paths, ...basic } = payload;
+        const retry = await supabase.from("trade_leads").insert(basic);
+        if (retry.error) console.error("Supabase insert failed:", retry.error);
+      }
     } catch (err) {
       console.error("Supabase insert failed:", err);
     }
 
+    media?.release();
     showConfirmation(data);
   });
 })();

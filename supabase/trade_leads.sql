@@ -1,3 +1,4 @@
+-- Fresh project only. If trade_leads already exists, run lead_media.sql instead.
 -- Run this in Supabase Dashboard → SQL Editor
 -- Project: https://xflljearjaiwcjortoam.supabase.co
 
@@ -11,7 +12,8 @@ create table trade_leads (
   est_wheels_per_week text,
   contact_number text not null,
   email text,
-  source_page text
+  source_page text,
+  media_paths text[]
 );
 
 alter table trade_leads enable row level security;
